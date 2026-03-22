@@ -1,0 +1,40 @@
+#ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOv0YAIz2X3cpGFLgMpv/H8pFqaYCq0ubcJm+O2FRJMM user7@DESKTOP-MFBGJUJ
+       (расширение pub вставить)
+
+
+
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACDr9GACM9l93KRhS4DKb/x/KRammAqtLm3CZvjthUSTDAAAAJgKHVA4Ch1Q
+OAAAAAtzc2gtZWQyNTUxOQAAACDr9GACM9l93KRhS4DKb/x/KRammAqtLm3CZvjthUSTDA
+AAAEBJmJu6AAu3BOVlGt9P0OJr4GSNo3/VjeXvzYwSA9BpjOv0YAIz2X3cpGFLgMpv/H8p
+FqaYCq0ubcJm+O2FRJMMAAAAFXVzZXI3QERFU0tUT1AtTUZCR0pVSg==
+-----END OPENSSH PRIVATE KEY-----
+
+
+     (git clone https://github.com/name/coddy_platformer1.git) и перенести в новую папку все файлы(logics, platformer1)
+
+     скачать гит в браузере (оранж иконка)
+
+     git add ., git status, git commit -m "first commit"
+     git push origin master
+
+
+     git config --global user.email "почта"
+     git config origin --global.user.name "имя"
+
+     git commit -m "first commit"
+     gin push origin platformer1
+
+     git branch develop
+     git checkout develop
+     git branch (проверить, что она есть на сайте)
+
+
+     git add .\logics.txt
+     git status (должен быть зеленым)
+     git commit -m "message"
+     git push origin develop
+
+
+     для каждой части логики создать новый пустой файл и добавить на гитхаю

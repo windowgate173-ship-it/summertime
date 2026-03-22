@@ -1,0 +1,38 @@
+platformer1_project/
+    main2.py
+    settings.py
+
+    assets/
+       images/
+          player.png
+          enemy.png
+          coin.png
+          tiles (если будет)
+          bg.png
+
+       sounds/
+          coin.wav
+          hit.wav
+          jump.wav
+          bg_music.wav(цикл)
+
+    game/
+       __init__.py
+       game.py
+       level.py
+       entities/
+          __init__.py
+          player.py
+          enemy.py
+          coin.py
+
+    world/
+       __init__.py
+       platform.py
+       camera.py
+
+    ui/
+       __init__.py
+       hud.py
+       screens.py
+
