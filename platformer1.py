@@ -1,6 +1,7 @@
 import pygame
 import sys
 
+
 pygame.init()
 
 
@@ -18,23 +19,78 @@ GRAVITY = 0.8
 LEVEL_WIDTH = 2100
 
 
+
+#pictures
+player_img = pygame.image.load('assset1/images/player.png/Grenadepenguin (1).png').convert_alpha()
+player_img = pygame.transform.scale(player_img, (40, 40))
+
+enemy_img = pygame.image.load('assset1/images/enemy.png/Hard.webp').convert_alpha()
+enemy_img = pygame.transform.scale(enemy_img, (40, 40))
+
+coin_img = pygame.image.load('assset1/images/coin.png/3d-coin-illustration-free-png.png').convert_alpha()
+coin_img = pygame.transform.scale(coin_img, (30, 30))
+
+platform_img = pygame.image.load('assset1/images/platform.png/Wooden_platform_sprite_for_video_game.png').convert_alpha()
+platform_img = pygame.transform.scale(platform_img, (40, 40))
+
+portal_img = pygame.image.load('assset1/images/portal.png/5b537363393dc26c68b566fe482eb32d.png').convert_alpha()
+portal_img = pygame.transform.scale(portal_img, (40, 40))
+
+bg_image = pygame.image.load('assset1/images/bg.png/a-green-grass-landscape-on-a-transparent-background-free-png.png').convert_alpha()
+bg_image = pygame.transform.scale(bg_image, (WIDTH, HEIGHT))
+
+
+coin_frames = [
+    pygame.transform.scale(pygame.image.load("c7f297523ce57fc1.png").convert_alpha(), (20, 20)),
+    pygame.transform.scale(pygame.image.load("c7f297523ce57fc2.png").convert_alpha(), (20, 20)),
+    pygame.transform.scale(pygame.image.load("c7f297523ce57fc3.png").convert_alpha(), (20, 20)),
+    pygame.transform.scale(pygame.image.load("c7f297523ce57fc4.png").convert_alpha(), (20, 20))
+
+]
+
+
+
+
 class Platform:
     def __init__(self, x, y, w, h):
+        self.image = pygame.image.load("assset1/images/platform.png/Wooden_platform_sprite_for_video_game.png")
+        self.image = pygame.transform.scale(self.image, (80, 143))
         self.rect = pygame.Rect(x, y, w, h)
 
-    def draw(self, surf, camera_x = 0):
-        pygame.draw.rect(surf, (0, 255, 255), (self.rect.x - camera_x, self.rect.y, self.rect.w, self.rect.h))
+    def draw(self, surf, platform_img, camera_x = 0):
+        surf.blit( platform_img, self.rect.x - camera_x, self.rect.y, self.rect.w, self.rect.h)
+
+
+
 
 class Coin:
     def __init__(self, x, y):
+        self.image = pygame.image.load("assset1/images/coin.png/3d-coin-illustration-free-png.png")
+        self.image = pygame.transform.scale(self.image, (20, 20))
         self.rect = pygame.Rect(x, y, 20, 20)
+        self.frame = 0
+        self.timer = 0
 
-    def draw(self, surf, camera_x = 0):
-        pygame.draw.circle(surf, (255, 128, 0), (self.rect.centerx - camera_x, self.rect.centery), 20)
+    def update(self):
+        self.timer = 1
+
+        if self.timer >= 10:
+          self.timer = 0
+          self.frame *= 1
+
+          if self.frame >= len(coin_frames):
+              self.frame = 0
+
+    def draw(self, surf, camera_x=0):
+        surf.blit( coin_img, (self.rect.centerx - camera_x, self.rect.centery), 30)
+
+
 
 
 class Enemy:
     def __init__(self, x, y, left_limit, right_limit):
+        self.image = pygame.image.load("assset1/images/enemy.png/Hard.webp")
+        self.image = pygame.transform.scale(self.image, (40, 40))
         self.rect = pygame.Rect(x, y, 40, 40)
         self.speed = 2
         self.dir = 1
@@ -47,12 +103,15 @@ class Enemy:
             self.dir *= -1
 
     def draw(self, surf, camera_x = 0):
-        pygame.draw.rect(surf, (255, 0, 0), (self.rect.x - camera_x, self.rect.y, self.rect.w, self.rect.h))
+        surf.blit(enemy_img, self.rect.x - camera_x, self.rect.y, self.rect.w, self.rect.h)
+
 
 
 class Player:
 
     def __init__(self):
+        self.image = pygame.image.load("assset1/images/player.png/Grenadepenguin (1).png")
+        self.image = pygame.transform.scale(self.image, (40, 40))
         self.rect = pygame.Rect(60, 300, 40, 40)
 
         self.vel_y = 0
@@ -116,7 +175,21 @@ class Player:
         if self.invuln > 0  and  (self.invuln % 10) <5:
             return
 
-        pygame.draw.rect(surf, (2, 2, 2), (self.rect.x - camera_x, self.rect.y, self.rect.w, self.rect.h))
+        surf.blit( player_img, self.rect.x - camera_x, self.rect.y, self.rect.w, self.rect.h)
+
+
+
+
+class Portal:
+    def __init__(self, x, y, w, h):
+        self.image = pygame.image.load("assset1/images/portal.png/5b537363393dc26c68b566fe482eb32d.png")
+        self.image = pygame.transform.scale(self.image, (80, 80))
+        self.rect = pygame.Rect(x, y, w, h)
+
+    def draw(self, surf, portal_img, camera_x = 0):
+        surf.blit( portal_img, self.rect.x - camera_x, self.rect.y, self.rect.w, self.rect.h)
+
+
 
 
 class Game:
@@ -159,9 +232,9 @@ class Game:
             Enemy(770, 720, 400, 620),
         ]
 
+        self.portal = [ Portal(1000, 1000, 80, 80) ]
         self.score = 0
         self.game_over = False
-        self.finish = pygame.Rect(2100, HEIGHT - 100, 40, 60)
         self.camera_x = 0
 
     def collect_coins(self):
@@ -177,8 +250,8 @@ class Game:
                self.player.lives -= 1
 
     def check_finish(self):
-        for finish_rect in self.finish:
-            if self.player.rect.colliderect(finish_rect):
+        for finish_rect in self.portal:
+            if self.player.rect.colliderect(portal_img.get_rect()):
                 game_over = True
                 tj = font.render("YOU WON", True, (255, 255, 0))
 
@@ -202,6 +275,11 @@ class Game:
                         self.reset()
 
             if not self.game_over:
+
+                for c in self.coins:
+                    c.update()
+
+
                 self.player.update(self.platform)
 
                 for e in self.enemies:
